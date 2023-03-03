@@ -5,6 +5,9 @@
 // I would declare the pointers to the matrices here (i.e., extern double **A, **B, **C),
 // as well as the size of the matrices, etc.
 
+extern double **A, **B;
+extern int size, numThreads;
+
 void mmm_init();
 void mmm_reset(double **);
 void mmm_freeup();

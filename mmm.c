@@ -9,36 +9,96 @@
  * Allocate and initialize the matrices on the heap. Populate
  * the input matrices with random integers from 0 to 99
  */
-void mmm_init() {
-	// TODO
+void mmm_init()
+{
+	// Malloc first matrix (A)
+	A = (double **)malloc(sizeof(double *) * size);
+	for (int i = 0; i < size; i++)
+	{
+		A[i] = (double *)malloc(sizeof(double) * size);
+	}
+
+	// TODO - Populate A with random double values 0-99
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			A[i][j] = rand() % 100;
+		}
+	}
+
+	// Malloc second matrix (B)
+	B = (double **)malloc(sizeof(double *) * size);
+	for (int i = 0; i < size; i++)
+	{
+		B[i] = (double *)malloc(sizeof(double) * size);
+	}
+
+	// TODO - Populate B with random double values 0-99
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			B[i][j] = rand() % 100;
+		}
+	}
 }
 
 /**
  * Reset a given matrix to zeroes
  * @param matrix pointer to a 2D array
  */
-void mmm_reset(double **matrix) {
+void mmm_reset(double **matrix)
+{
 	// TODO
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			matrix[i][j] = 0;
+		}
+	}
 }
 
 /**
  * Free up memory allocated to all matrices
  */
-void mmm_freeup() {
-	// TODO
+void mmm_freeup()
+{
+	// Free matrix A
+	for (int i = 0; i < size; i++)
+	{
+		free(A[i]);
+		A[i] = NULL;
+	}
+
+	free(A);
+	A = NULL;
+
+	// Free matrix B
+	for (int i = 0; i < size; i++)
+	{
+		free(B[i]);
+		B[i] = NULL;
+	}
+
+	free(B);
+	B = NULL;
 }
 
 /**
  * Sequential MMM
  */
-void mmm_seq() {
+void mmm_seq()
+{
 	// TODO - code to perform sequential MMM
 }
 
 /**
  * Parallel MMM
  */
-void *mmm_par(void *args) {
+void *mmm_par(void *args)
+{
 	// TODO - code to perform parallel MMM
 }
 
@@ -49,7 +109,8 @@ void *mmm_par(void *args) {
  * @return the largest error between two corresponding elements
  * in the result matrices
  */
-double mmm_verify() {
+double mmm_verify()
+{
 	// TODO
 	return -1;
 }
