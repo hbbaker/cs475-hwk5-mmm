@@ -42,6 +42,20 @@ void mmm_init()
 			B[i][j] = rand() % 100;
 		}
 	}
+
+	// Malloc third matrix (C)
+	C = (double **)malloc(sizeof(double *) * size);
+	for (int i = 0; i < size; i++)
+	{
+		C[i] = (double *)malloc(sizeof(double) * size);
+	}
+
+	// Malloc third matrix (D)
+	D = (double **)malloc(sizeof(double *) * size);
+	for (int i = 0; i < size; i++)
+	{
+		D[i] = (double *)malloc(sizeof(double) * size);
+	}
 }
 
 /**
@@ -84,6 +98,26 @@ void mmm_freeup()
 
 	free(B);
 	B = NULL;
+
+	// Free matrix C
+	for (int i = 0; i < size; i++)
+	{
+		free(C[i]);
+		C[i] = NULL;
+	}
+
+	free(C);
+	C = NULL;
+
+	// Free matrix D
+	for (int i = 0; i < size; i++)
+	{
+		free(D[i]);
+		D[i] = NULL;
+	}
+
+	free(D);
+	D = NULL;
 }
 
 /**
@@ -91,7 +125,18 @@ void mmm_freeup()
  */
 void mmm_seq()
 {
-	// TODO - code to perform sequential MMM
+	// Based on algorithm showed at https://www.geeksforgeeks.org/c-program-multiply-two-matrices/
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			C[i][j] = 0;
+			for (int k = 0; k < size; k++)
+			{
+				C[i][j] += A[i][k] * B[k][j];
+			}
+		}
+	}
 }
 
 /**
@@ -100,6 +145,19 @@ void mmm_seq()
 void *mmm_par(void *args)
 {
 	// TODO - code to perform parallel MMM
+	thread_args *params = (thread_args *)args;
+
+	for (int i = params->begin; i <= params->end; i++)
+	{
+		for (int j = params->begin; j <= params->end; j++)
+		{
+			D[i][j] = 0;
+			for (int k = 0; k <= size; k++)
+			{
+				D[i][j] += A[i][k] * B[k][j];
+			}
+		}
+	}
 }
 
 /**

@@ -5,11 +5,15 @@
 #include "rtclock.h"
 #include "mmm.h"
 
+double **A, **B, **C, **D;
+int size, numThreads;
+
 int main(int argc, char *argv[])
 {
-	double clockstart, clockend;
-	double **A, **B;
-	int size, numThreads;
+	double clockstart, clockend, overallTimeS, overallTimeP;
+	overallTimeS = 0;
+	overallTimeP = 0;
+
 	// clockstart = rtclock(); // start clocking
 
 	// start: stuff I want to clock
@@ -27,6 +31,42 @@ int main(int argc, char *argv[])
 				printf("thread count: 1\n");
 				printf("size: %d\n", size);
 				printf("========\n");
+
+				// First Run (Throwaway)
+				mmm_init();
+				// clockstart = rtclock();
+				mmm_seq();
+				// clockend = rtclock();
+				// overallTime += (clockend - clockstart);
+				mmm_freeup();
+
+				// Second Run
+				mmm_init();
+				clockstart = rtclock();
+				mmm_seq();
+				clockend = rtclock();
+				overallTimeS += (clockend - clockstart);
+				mmm_freeup();
+
+				// Third Run
+				mmm_init();
+				clockstart = rtclock();
+				mmm_seq();
+				clockend = rtclock();
+				overallTimeS += (clockend - clockstart);
+				mmm_freeup();
+
+				// Fourth Run
+				mmm_init();
+				clockstart = rtclock();
+				mmm_seq();
+				clockend = rtclock();
+				overallTimeS += (clockend - clockstart);
+				mmm_freeup();
+
+				overallTimeS = overallTimeS / (double)3;
+
+				printf("Sequential Time (avg of 3 runs): %f secs\n", overallTimeS);
 			}
 			else
 			{
@@ -70,6 +110,35 @@ int main(int argc, char *argv[])
 				printf("thread count: %d\n", numThreads);
 				printf("size: %d\n", size);
 				printf("========\n");
+
+				// Prep Thread Inputs
+				thread_args *args = (thread_args *)malloc(numThreads * sizeof(thread_args));
+				for (int i = 0; i < numThreads; i++)
+				{
+					args[i].tid = i;
+					args[i].begin = i * size / numThreads;
+					args[i].end = (i + 1) * size / numThreads - 1;
+				}
+
+				// First Run (Throwaway)
+				//--------------------------------------------------
+				// Allocate space to hold threads
+				pthread_t *threads = (pthread_t *)malloc(numThreads * sizeof(pthread_t));
+				for (int i = 0; i < numThreads; i++)
+				{
+					pthread_create(&threads[i], NULL, mmm_par, &args[i]);
+					printf("Running Thread %d\n", i);
+				}
+				// Free Matrices
+				mmm_freeup();
+
+				// Free args and threads
+				free(args);
+				args = NULL;
+
+				free(threads);
+				threads = NULL;
+				//--------------------------------------------------
 			}
 		}
 		else
