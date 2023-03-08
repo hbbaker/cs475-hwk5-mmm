@@ -50,7 +50,7 @@ void mmm_init()
 		C[i] = (double *)malloc(sizeof(double) * size);
 	}
 
-	// Malloc third matrix (D)
+	// Malloc fourth matrix (D)
 	D = (double **)malloc(sizeof(double *) * size);
 	for (int i = 0; i < size; i++)
 	{

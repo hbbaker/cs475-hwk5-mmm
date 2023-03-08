@@ -129,6 +129,11 @@ int main(int argc, char *argv[])
 					pthread_create(&threads[i], NULL, mmm_par, &args[i]);
 					printf("Running Thread %d\n", i);
 				}
+
+				for (int i = 0; i < numThreads; i++)
+				{
+					pthread_join(threads[i], NULL);
+				}
 				// Free Matrices
 				mmm_freeup();
 
