@@ -116,8 +116,8 @@ int main(int argc, char *argv[])
 				for (int i = 0; i < numThreads; i++)
 				{
 					args[i].tid = i;
-					args[i].begin = i * size / numThreads;
-					args[i].end = (i + 1) * size / numThreads - 1;
+					args[i].begin = i * (size / numThreads);
+					args[i].end = (i + 1) * (size / numThreads) - 1;
 				}
 
 				// First Run (Throwaway)

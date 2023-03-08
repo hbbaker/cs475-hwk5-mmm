@@ -147,12 +147,12 @@ void *mmm_par(void *args)
 	// TODO - code to perform parallel MMM
 	thread_args *params = (thread_args *)args;
 
-	for (int i = params->begin; i <= params->end; i++)
+	for (int i = params->begin; i < params->end; i++)
 	{
-		for (int j = params->begin; j <= params->end; j++)
+		for (int j = params->begin; j < params->end; j++)
 		{
 			D[i][j] = 0;
-			for (int k = 0; k <= size; k++)
+			for (int k = 0; k < size; k++)
 			{
 				D[i][j] += A[i][k] * B[k][j];
 			}
