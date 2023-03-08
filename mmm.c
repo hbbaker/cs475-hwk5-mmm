@@ -18,7 +18,7 @@ void mmm_init()
 		A[i] = (double *)malloc(sizeof(double) * size);
 	}
 
-	// TODO - Populate A with random double values 0-99
+	// Populate A with random double values 0-99
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < size; j++)
@@ -34,7 +34,7 @@ void mmm_init()
 		B[i] = (double *)malloc(sizeof(double) * size);
 	}
 
-	// TODO - Populate B with random double values 0-99
+	// Populate B with random double values 0-99
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < size; j++)
@@ -64,7 +64,6 @@ void mmm_init()
  */
 void mmm_reset(double **matrix)
 {
-	// TODO
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < size; j++)
@@ -144,12 +143,13 @@ void mmm_seq()
  */
 void *mmm_par(void *args)
 {
-	// TODO - code to perform parallel MMM
+	// Cast params input to args struct
 	thread_args *params = (thread_args *)args;
 
-	for (int i = params->begin; i < params->end; i++)
+	// Within range of begin to end, calculate products for each column
+	for (int i = params->begin; i <= params->end; i++)
 	{
-		for (int j = params->begin; j < params->end; j++)
+		for (int j = 0; j < size; j++)
 		{
 			D[i][j] = 0;
 			for (int k = 0; k < size; k++)
@@ -158,6 +158,7 @@ void *mmm_par(void *args)
 			}
 		}
 	}
+	return NULL;
 }
 
 /**
@@ -169,6 +170,19 @@ void *mmm_par(void *args)
  */
 double mmm_verify()
 {
-	// TODO
-	return -1;
+	double largestError = 0; // Init var
+
+	// For each element in each array, verify that values are the same, if larger error is found between seq and par array
+	// then update largestError accordingly and return it
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			if ((C[i][j] - D[i][j]) < largestError)
+			{
+				largestError = C[i][j] - D[i][j];
+			}
+		}
+	}
+	return largestError;
 }

@@ -10,9 +10,9 @@ extern int size, numThreads;
 
 typedef struct thread_args
 {
-    int tid;    // the given thread id (0, 1, ...)
-    long begin; // where to begin matrix mult
-    long end;   // where to end matrix mult
+    int tid;   // the given thread id (0, 1, ...)
+    int begin; // where to begin matrix mult
+    int end;   // where to end matrix mult
 } thread_args;
 
 void mmm_init();
